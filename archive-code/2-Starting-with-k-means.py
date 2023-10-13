@@ -44,14 +44,77 @@ plt.show()
 print("------------------------------------------------------")
 print("Appel KMeans pour une valeur de k fixée")
 tps1 = time.time()
-k=3
+
+def good_inerties():
+    # pour k qui va de 1 à 10
+    inerties = []
+    for k in range(1,11):
+        model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        model.fit(datanp)
+        inertie = model.inertia_
+        inerties.append(inertie)
+    print("Inerties : ")
+    print(inerties)
+
+    # Plot the evolution of the inerties
+    plt.figure(figsize=(6, 6))
+    plt.plot(range(1,11),inerties)
+    plt.title("Evolution de l'inertie intra-classe")
+    #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-inerties.jpg",bbox_inches='tight', pad_inches=0.1)
+    plt.show()
+
+    #calcul du changement de pente
+    print("Changement de pente : ")
+    print(np.diff(inerties))
+
+    # find where the difference is the largest
+    print("Indice du changement de pente : ")
+    print(np.argmax(np.diff(inerties))+2)
+
+    print("On peut constater graphiquement un changement drastic de pente à k=3 (jeux de données xclara)")
+    print("On peut donc en déduire que le nombre de clusters optimal est 3")
+
+    return 3
+
+def silhouette():
+    # pour k qui va de 2 à 10
+    silhouettes = []
+    for k in range(2,11):
+        model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        model.fit(datanp)
+        labels = model.labels_
+        silhouette = metrics.silhouette_score(datanp, labels, metric='euclidean')
+        silhouettes.append(silhouette)
+    
+    #print silhouette table
+    print("Silhouettes : ")
+    print(silhouettes)
+
+    # Plot the evolution of the silhouettes
+    plt.figure(figsize=(6, 6))
+    plt.plot(range(2,11),silhouettes)
+    plt.title("Evolution de la silhouette")
+    #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-silhouette.jpg",bbox_inches='tight', pad_inches=0.1)
+    plt.show()
+
+    return np.argmax(silhouettes)+2
+
+# Optimal inertie
+#k = good_inerties()
+
+# Optimal silhouette
+k = silhouette()
+print ("k optimal = ", k)
+
 model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
 model.fit(datanp)
+
 tps2 = time.time()
 labels = model.labels_
+
 # informations sur le clustering obtenu
-iteration = model.n_iter_
 inertie = model.inertia_
+iteration = model.n_iter_
 centroids = model.cluster_centers_
 
 #plt.figure(figsize=(6, 6))
