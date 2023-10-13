@@ -64,7 +64,50 @@ plt.show()
 print("nb clusters =",k,", nb iter =",iteration, ", inertie = ",inertie, ", runtime = ", round((tps2 - tps1)*1000,2),"ms")
 #print("labels", labels)
 
+####################### SEPARATION #######################
+
 from sklearn.metrics.pairwise import euclidean_distances
 dists = euclidean_distances(centroids)
-print(dists)
 
+print("------------------------------------------------------")
+print("SEPARATION : ")
+
+print("Distance min : ")
+print(np.min(dists[dists>0]))
+
+print("Distance max : ")
+print(np.max(dists))
+
+print("Distance moyenne : ")
+print(np.mean(dists[dists>0]))
+
+################# REGROUPEMENT #################
+print("------------------------------------------------------")
+print("REGROUPEMENT : ")
+
+def k_means_distance(data,cx, cy, i_centroid, cluster_labels):
+    distances = [np.sqrt((x-cx)**2+(y-cy)**2) for (x, y) in data[cluster_labels == i_centroid]]
+    return distances
+
+distances = []
+for i, (cx, cy) in enumerate(centroids):
+    mean_distance = k_means_distance(datanp,cx, cy, i, labels)
+    distances.append(mean_distance)
+
+min_distance = []
+for i in range(len(distances)):
+    min_distance.append(np.min(distances[i]))
+print("Distances min : ")
+print(min_distance)
+
+max_distance = []
+for i in range(len(distances)):
+    max_distance.append(np.max(distances[i]))
+print("Distances max : ")
+print(max_distance)
+
+mean_distance = []
+for i in range(len(distances)):
+    mean_distance.append(np.mean(distances[i]))
+print("Distances moyennes : ")
+print(mean_distance)

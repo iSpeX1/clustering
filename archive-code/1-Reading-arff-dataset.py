@@ -24,7 +24,7 @@ from scipy.io import arff
 
 
 path = './artificial/'
-name="square1.arff"
+name="s-set3.arff"
 #path_out = './fig/'
 
 databrut = arff.loadarff(open(path+str(name), 'r'))
