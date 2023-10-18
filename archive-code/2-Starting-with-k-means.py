@@ -49,7 +49,10 @@ def good_inerties():
     # pour k qui va de 1 à 10
     inerties = []
     for k in range(1,11):
-        model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        #kmeans
+        #model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        #MiniBatch
+        model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)   
         model.fit(datanp)
         inertie = model.inertia_
         inerties.append(inertie)
@@ -80,7 +83,10 @@ def silhouette():
     # pour k qui va de 2 à 10
     silhouettes = []
     for k in range(2,11):
-        model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        #kmeans
+        #model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+        #MiniBatch
+        model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)
         model.fit(datanp)
         labels = model.labels_
         silhouette = metrics.silhouette_score(datanp, labels, metric='euclidean')
@@ -100,16 +106,25 @@ def silhouette():
     return np.argmax(silhouettes)+2
 
 # Optimal inertie
-#k = good_inerties()
+k = good_inerties()
 
 # Optimal silhouette
-k = silhouette()
-print ("k optimal = ", k)
+#k = silhouette()
+#print ("k optimal = ", k)
 
-model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+#Kmneans
+#model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+
+#MiniBatch
+model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)
+
 model.fit(datanp)
 
 tps2 = time.time()
+
+tps = tps2 - tps1
+print("Temps de calcul : ", round(tps,2),"s")
+
 labels = model.labels_
 
 # informations sur le clustering obtenu

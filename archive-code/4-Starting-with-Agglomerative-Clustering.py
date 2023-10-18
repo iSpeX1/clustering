@@ -41,7 +41,7 @@ plt.show()
 # 
 tps1 = time.time()
 seuil_dist=10
-model = cluster.AgglomerativeClustering(distance_threshold=seuil_dist, linkage='average', n_clusters=None)
+model = cluster.AgglomerativeClustering(distance_threshold=seuil_dist, linkage='single', n_clusters=None)
 model = model.fit(datanp)
 tps2 = time.time()
 labels = model.labels_
@@ -58,9 +58,9 @@ print("nb clusters =",k,", nb feuilles = ", leaves, " runtime = ", round((tps2 -
 ###
 # FIXER le nombre de clusters
 ###
-k=4
+k=3
 tps1 = time.time()
-model = cluster.AgglomerativeClustering(linkage='average', n_clusters=k)
+model = cluster.AgglomerativeClustering(linkage='single', n_clusters=k)
 model = model.fit(datanp)
 tps2 = time.time()
 labels = model.labels_
@@ -76,6 +76,5 @@ plt.title("Clustering agglomératif (average, n_cluster= "+str(k)+") "+str(name)
 plt.show()
 print("nb clusters =",kres,", nb feuilles = ", leaves, " runtime = ", round((tps2 - tps1)*1000,2),"ms")
 
-
-
 #######################################################################
+

@@ -63,7 +63,7 @@ def plot_dendrogram(model, **kwargs):
 
 
 # setting distance_threshold=0 ensures we compute the full tree.
-model = cluster.AgglomerativeClustering(distance_threshold=0, linkage='average', n_clusters=None)
+model = cluster.AgglomerativeClustering(distance_threshold=0, linkage='single', n_clusters=None)
 
 model = model.fit(datanp)
 plt.figure(figsize=(12, 12))
