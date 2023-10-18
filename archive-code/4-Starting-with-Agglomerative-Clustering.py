@@ -11,6 +11,10 @@ from sklearn import metrics
 # Exemple : Agglomerative Clustering
 
 
+#######################################################################
+### Données initiales
+#######################################################################
+
 path = './artificial/'
 name="xclara.arff"
 
@@ -36,45 +40,90 @@ plt.title("Donnees initiales : "+ str(name))
 plt.show()
 
 
-
-### FIXER la distance
-# 
-tps1 = time.time()
-seuil_dist=10
-model = cluster.AgglomerativeClustering(distance_threshold=seuil_dist, linkage='single', n_clusters=None)
-model = model.fit(datanp)
-tps2 = time.time()
-labels = model.labels_
-# Nb iteration of this method
-#iteration = model.n_iter_
-k = model.n_clusters_
-leaves=model.n_leaves_
-plt.scatter(f0, f1, c=labels, s=8)
-plt.title("Clustering agglomératif (average, distance_treshold= "+str(seuil_dist)+") "+str(name))
-plt.show()
-print("nb clusters =",k,", nb feuilles = ", leaves, " runtime = ", round((tps2 - tps1)*1000,2),"ms")
+#######################################################################
+### Fixer la distance
+#######################################################################
 
 
-###
-# FIXER le nombre de clusters
-###
-k=3
-tps1 = time.time()
-model = cluster.AgglomerativeClustering(linkage='single', n_clusters=k)
-model = model.fit(datanp)
-tps2 = time.time()
-labels = model.labels_
-# Nb iteration of this method
-#iteration = model.n_iter_
-kres = model.n_clusters_
-leaves=model.n_leaves_
-#print(labels)
-#print(kres)
+# Iteration du clustering agglomératif sur distance_threshold, évaluation avec silhouette
+def silhouette_agglo_linkage(linkage_arg):
+    silhouettes = []
+    #The range start at 1 because the distance_threshold must be at least 1
+    for seuil_dist in range(1,11):
+        tps1 = time.time()
+        model = cluster.AgglomerativeClustering(distance_threshold=seuil_dist, linkage=linkage_arg, n_clusters=None)
+        model = model.fit(datanp)
+        tps2 = time.time()
+        labels = model.labels_
+        leaves=model.n_leaves_
+        k = model.n_clusters_
+        silhouettes.append(metrics.silhouette_score(datanp, labels, metric='euclidean'))
+        print("nb clusters =",k,", nb feuilles = ", leaves, " runtime = ", round((tps2 - tps1)*1000,2),"ms")
 
-plt.scatter(f0, f1, c=labels, s=8)
-plt.title("Clustering agglomératif (average, n_cluster= "+str(k)+") "+str(name))
-plt.show()
-print("nb clusters =",kres,", nb feuilles = ", leaves, " runtime = ", round((tps2 - tps1)*1000,2),"ms")
+    print("Silhouettes : ")
+    print(silhouettes)
+
+    # Plot the evolution of the silhouettes
+    plt.figure(figsize=(6, 6))
+    plt.plot(range(1,11),silhouettes)
+    plt.title("Evolution de la silhouette avec linkage = "+str(linkage_arg))
+    #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-silhouette.jpg",bbox_inches='tight', pad_inches=0.1)
+    plt.show()
+
+#APPELS DES FONCTIONS AVEC LES DIFFERENTS LINKAGE
+silhouette_agglo_linkage('single')
+silhouette_agglo_linkage('complete')
+silhouette_agglo_linkage('average')
+silhouette_agglo_linkage('ward')
+
+
+
+#plt.scatter(f0, f1, c=labels, s=8)
+#plt.title("Clustering agglomératif (average, distance_treshold= "+str(seuil_dist)+") "+str(name))
+#plt.show()
+
+
+#######################################################################
+# Fixer le nombre de clusters
+#######################################################################
+
+# Iteration du clustering agglomératif sur le nombre de clusters, évaluation avec silhouette
+
+def silhouette_agglo_nclusters(linkage_arg):
+    silhouettes = []
+    #The range start at 2 because the number of clusters must be at least 2
+    for k in range(2,11):
+        tps1 = time.time()
+        model = cluster.AgglomerativeClustering(linkage=linkage_arg, n_clusters=k)
+        model = model.fit(datanp)
+        tps2 = time.time()
+        labels = model.labels_
+        leaves=model.n_leaves_
+        silhouettes.append(metrics.silhouette_score(datanp, labels, metric='euclidean'))
+        print("nb clusters =",k,", nb feuilles = ", leaves, " runtime = ", round((tps2 - tps1)*1000,2),"ms")
+
+    print("Silhouettes : ")
+    print(silhouettes)
+
+    # Plot the evolution of the silhouettes
+    plt.figure(figsize=(6, 6))
+    plt.plot(range(2,11),silhouettes)
+    plt.title("Evolution de la silhouette avec linkage = "+str(linkage_arg))
+    #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-silhouette.jpg",bbox_inches='tight', pad_inches=0.1)
+    plt.show()
+
+
+#APPELS DES FONCTIONS AVEC LES DIFFERENTS LINKAGE
+silhouette_agglo_nclusters('single')
+silhouette_agglo_nclusters('complete')
+silhouette_agglo_nclusters('average')
+silhouette_agglo_nclusters('ward')
+
+
+
+#plt.scatter(f0, f1, c=labels, s=8)
+#plt.title("Clustering agglomératif (average, n_cluster= "+str(k)+") "+str(name))
+#plt.show()
 
 #######################################################################
 

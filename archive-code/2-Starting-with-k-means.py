@@ -43,10 +43,11 @@ plt.show()
 # Run clustering method for a given number of clusters
 print("------------------------------------------------------")
 print("Appel KMeans pour une valeur de k fixée")
-tps1 = time.time()
+
 
 def good_inerties():
     # pour k qui va de 1 à 10
+    tps1 = time.time()
     inerties = []
     for k in range(1,11):
         #kmeans
@@ -56,6 +57,9 @@ def good_inerties():
         model.fit(datanp)
         inertie = model.inertia_
         inerties.append(inertie)
+    tps2 = time.time()
+    tps = tps2 - tps1
+    print("Temps de calcul : ", round(tps,2),"s")
     print("Inerties : ")
     print(inerties)
 
@@ -81,6 +85,8 @@ def good_inerties():
 
 def silhouette():
     # pour k qui va de 2 à 10
+    tps1 = time.time()
+
     silhouettes = []
     for k in range(2,11):
         #kmeans
@@ -91,7 +97,9 @@ def silhouette():
         labels = model.labels_
         silhouette = metrics.silhouette_score(datanp, labels, metric='euclidean')
         silhouettes.append(silhouette)
-    
+    tps2 = time.time()
+    tps = tps2 - tps1
+    print("Temps de calcul : ", round(tps,2),"s")
     #print silhouette table
     print("Silhouettes : ")
     print(silhouettes)
@@ -110,7 +118,9 @@ k = good_inerties()
 
 # Optimal silhouette
 #k = silhouette()
+
 #print ("k optimal = ", k)
+
 
 #Kmneans
 #model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
@@ -120,10 +130,7 @@ model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)
 
 model.fit(datanp)
 
-tps2 = time.time()
 
-tps = tps2 - tps1
-print("Temps de calcul : ", round(tps,2),"s")
 
 labels = model.labels_
 
@@ -139,7 +146,6 @@ plt.title("Données après clustering : "+ str(name) + " - Nb clusters ="+ str(k
 #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-cluster.jpg",bbox_inches='tight', pad_inches=0.1)
 plt.show()
 
-print("nb clusters =",k,", nb iter =",iteration, ", inertie = ",inertie, ", runtime = ", round((tps2 - tps1)*1000,2),"ms")
 #print("labels", labels)
 
 ####################### SEPARATION #######################
