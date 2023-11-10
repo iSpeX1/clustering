@@ -1,0 +1,171 @@
+#######################################
+QUESTION 3.2
+#######################################
+
+On applique itérativement la méthode de clustering agglomératif pour chaque méthode de linkage.
+Ces tests seront effectués sur le jeu de données "xclara"
+
+nous appliquons cette méthode en agissant sur le nombre de cluster
+
+
+note pour este: voir screen pour courbe 
+
+
+    single
+
+nb clusters = 2  runtime =  80.49 ms
+nb clusters = 3  runtime =  36.02 ms
+nb clusters = 4  runtime =  47.57 ms
+nb clusters = 5  runtime =  37.09 ms
+nb clusters = 6  runtime =  44.53 ms
+nb clusters = 7  runtime =  60.85 ms
+nb clusters = 8  runtime =  44.58 ms
+nb clusters = 9  runtime =  57.94 ms
+nb clusters = 10  runtime =  59.55 ms
+Silhouettes : 
+[0.2765263608063444, 0.02996091241427347, 0.016609401001720574, -0.1565261364424422, -0.1591724305624011, -0.30097897652767724, -0.33549791126078365, -0.35314662907125594, -0.35732076727197376]
+
+ meilleur silhouette pour cluster=2
+ => pue le caca
+ tt le rest c good
+
+
+    complete
+
+nb clusters = 2  runtime =  116.89 ms
+nb clusters = 3  runtime =  151.07 ms
+nb clusters = 4  runtime =  160.97 ms
+nb clusters = 5  runtime =  153.76 ms
+nb clusters = 6  runtime =  126.68 ms
+nb clusters = 7  runtime =  120.89 ms
+nb clusters = 8  runtime =  118.87 ms
+nb clusters = 9  runtime =  128.46 ms
+nb clusters = 10  runtime =  121.47 ms
+Silhouettes : 
+[0.5427963605097919, 0.6944172596005592, 0.5556692443642856, 0.42941157408318836, 0.40879541314927487, 0.4075874526109231, 0.2596204129949659, 0.2642260818749228, 0.2427941091229914]
+
+ meilleur silhouette pour cluster=3
+
+
+    average
+
+nb clusters = 2  runtime =  137.01 ms
+nb clusters = 3  runtime =  108.23 ms
+nb clusters = 4  runtime =  139.63 ms
+nb clusters = 5  runtime =  135.28 ms
+nb clusters = 6  runtime =  145.38 ms
+nb clusters = 7  runtime =  123.63 ms
+nb clusters = 8  runtime =  108.16 ms
+nb clusters = 9  runtime =  146.7 ms
+nb clusters = 10  runtime =  146.01 ms
+Silhouettes : 
+[0.5425849469368865, 0.6929773697934282, 0.6207355971212379, 0.5589405363038763, 0.4539776426647489, 0.35838969194634485, 0.3304476534885536, 0.31712311306639407, 0.27868937447996867]
+
+meilleur silhouette pour cluster=3
+
+    ward
+
+nb clusters = 2  runtime =  125.92 ms
+nb clusters = 3  runtime =  144.46 ms
+nb clusters = 4  runtime =  130.05 ms
+nb clusters = 5  runtime =  136.23 ms
+nb clusters = 6  runtime =  130.84 ms
+nb clusters = 7  runtime =  122.27 ms
+nb clusters = 8  runtime =  125.9 ms
+nb clusters = 9  runtime =  121.92 ms
+nb clusters = 10  runtime =  121.64 ms
+Silhouettes : 
+[0.5427963605097919, 0.6941949594065251, 0.5332756530462549, 0.40224948821799805, 0.2916891815354351, 0.29164688617102974, 0.3052769891218096, 0.30459285747015635, 0.3052529567592608]
+
+meilleur silhouette pour cluster=3
+
+#######################################
+QUESTION 3.3
+#######################################
+
+On va tester avec diffferents clusters
+
+VOIR IMAGES SILHOUETTE ET NUAGES
+
+2 jeux ou l'on peut bien identifier les clusters
+
+Diamond
+=> clusters espacés les uns des autres et facilement discernable
+    se discerne facilement avec quasiment toutes les methodes de linkage (single excepté)
+
+
+2sp2glob
+=> simple autre exemple d'un jeu de données facilement identifiable pour les meme raison
+
+
+
+
+2 jeux ou l'on peut mal identifier les clusters
+
+golfball
+=> nuage de point uniforme donc difficile de déterminer differents clusters
+
+chainlink
+=> ne marche pas biuen, on devrait s'attendre a avoir une séparation entre les deux "brins" de chaine, or comme les cluster ne sont pas bien espacé, cette méthode ne semble pas fonctionner.
+
+
+moit moit lol
+(on a également des jeux de données qui sembleraient bien marcher sur le papier mais que ne sont pas bien détécté, ou bien qui ne sont pas détécté par toutes les méthodes de linkage: exemples ci dessous
+) 
+smile3
+=> fonctionne plus ou moins bien en fonction des differentes méthode de linkage. Fonctionne très bien avec single (ce qui est étrange car c'est d'habitude la moins performante), et fonctionne très mal avec les autre (ex ward en photo) => comment expliquer cela ? jsp mdr? se baser sur le cours ? si flemme ne pas expliquer
+
+Conclusion partie 3
+ces méthodes ne fonctionnement pas très bien lorsue les clusters ne sont pas clairement identifiable, ne permet pas de déterminer des tendances. Comme par exemple dans le jeu chain link, ne prend pas en compte l'alignement de certains points etc. 
+Cette méthode peut etre plus ou mins efficace en fonction du paramètre de linkage et du jeu de données étudié
+CONCLUSION BASE SUR MON FEELING ET A 0% SUR LE COURS MDR
+
+##########################################
+PARTIE 4 DBSCAN HDBSCAN
+##########################################
+
+
+QUESTION 4.1
+
+Sur données non standardisées
+en utilisant les valeurs : epsilon = 2 et min_pts =5
+=> On obtien 25 cluster et beaucoup de points (394)
+    pas optimal, on voudrait avoir 3 cluster
+
+en utilisant les valeurs : epsilon = 4 et min_pts = 10
+=> On obtien 3 cluster et beaucoup de points (162)
+cluster bien déterminé et séparé du bruit
+
+en utilisant des grosses valeurs pour epsilon (9 par ex)
+=> on obtient un seul enorme cluster 
+
+expliquer l'utilité de ces deux paramètres et leur implications
+
+QUESTION 4.2
+parler de la methode du coude et de la complexité de paramétrage : etudier le point d'inflexion de la moyenne des k plus proches voisins 
+exemple :
+    epsilon vaudra alors 4 pour xclara
+
+QUESTION 4.3
+a premiere vue des data sets tels que sizes1 semblent facile a analyser avec DBSCAN car on peut bien distinguer les cluster et en meme temps cette méthode permettrait de discerner le bruit.
+=> dans les faits, la méthode permet en effet bien d'identifier les clusters mais elle reste complexe à parametrer du au bruit
+
+De la meme manière : donut1 
+=> les clusters sont bien analysé et différenciés à condition que l'algorithme soit bien paramétré; on note quand meme des difficulté au niveau du bruit, le cercle exterieur est correctement groupé mais quelque soit le paramétrage, une partie sera quasiment toujours considéré comme du bruit
+
+
+wingnut : les deux cluster devraient être correctement identifié étant donné la séparation entre les deux nuages de points
+=> en effet une fois bien paramétré on identifie 2 cluster distinct et pas de bruit. Cependant pour certaine courbes, comme celle ci, le "coude" peut être difficle à déterminer
+
+square 5:difficile à analyser car ressemnle à du bruit
+=> en effet les clusters distingués ne sont pas du tout ceux attendus, selon le paramétrage nous auont ou bien un grand cluster principal ou bien de petits clusters au milieu de beaucoup de bruit. Mais jamais les 3 grandes zones ne seront bien distangués 
+
+curves1 : les clusters semblent faciles à discnerner mais les points étant très espacés le coude dec  la courbe de la distance aux k plus proches voisins sera probablement très abrupt
+=> en effet on observe quasiment une courbe en angle droit, ce qui rend très compliqué d'estimer une valeur de epsilon et donc de paramétrer correctement l'algorithme
+
+
+HDBSCAN
+
+square5
+=> très long à paramètrer avant d'avoir un résultat convenable. On arrive pas d'ailleurs à obtenir la configuration de cluster attendu. -> relève un problème de cette méthode. On n'a meme pas de courbe comme avant pour pouvoir configurer la valeur de min cluster sizes, donc peut être long dans certains cas à paramètrer, bien que très efficace dans d'autres situation
+

@@ -18,7 +18,7 @@ from sklearn import metrics
 # Exemple :  k-Means Clustering
 
 path = './artificial/'
-name="xclara.arff"
+name="mopsi-finland.arff"
 
 #path_out = './fig/'
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -70,14 +70,6 @@ def good_inerties():
     #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-inerties.jpg",bbox_inches='tight', pad_inches=0.1)
     plt.show()
 
-    #calcul du changement de pente
-    print("Changement de pente : ")
-    print(np.diff(inerties))
-
-    # find where the difference is the largest
-    print("Indice du changement de pente : ")
-    print(np.argmax(np.diff(inerties))+2)
-
     print("On peut constater graphiquement un changement drastic de pente à k=3 (jeux de données xclara)")
     print("On peut donc en déduire que le nombre de clusters optimal est 3")
 
@@ -114,19 +106,19 @@ def silhouette():
     return np.argmax(silhouettes)+2
 
 # Optimal inertie
-k = good_inerties()
+#k = good_inerties()
 
 # Optimal silhouette
-#k = silhouette()
+k = silhouette()
 
 #print ("k optimal = ", k)
 
 
 #Kmneans
-#model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
+model = cluster.KMeans(n_clusters=k, init='k-means++', n_init=1)
 
 #MiniBatch
-model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)
+#model = cluster.MiniBatchKMeans(n_clusters=k, init='k-means++', n_init=1)
 
 model.fit(datanp)
 
@@ -150,7 +142,7 @@ plt.show()
 
 ####################### SEPARATION #######################
 
-from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.metrics.pairwxclaraise import euclidean_distances
 dists = euclidean_distances(centroids)
 
 print("------------------------------------------------------")

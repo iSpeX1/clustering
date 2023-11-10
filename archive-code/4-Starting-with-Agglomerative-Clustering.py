@@ -16,7 +16,9 @@ from sklearn import metrics
 #######################################################################
 
 path = './artificial/'
-name="xclara.arff"
+name="chainlink.arff"
+
+#R15 good pour clustering agglomératif
 
 #path_out = './fig/'
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -71,10 +73,10 @@ def silhouette_agglo_linkage(linkage_arg):
     plt.show()
 
 #APPELS DES FONCTIONS AVEC LES DIFFERENTS LINKAGE
-silhouette_agglo_linkage('single')
-silhouette_agglo_linkage('complete')
-silhouette_agglo_linkage('average')
-silhouette_agglo_linkage('ward')
+#silhouette_agglo_linkage('single')
+#silhouette_agglo_linkage('complete')
+#silhouette_agglo_linkage('average')
+#silhouette_agglo_linkage('ward')
 
 
 
@@ -89,7 +91,7 @@ silhouette_agglo_linkage('ward')
 
 # Iteration du clustering agglomératif sur le nombre de clusters, évaluation avec silhouette
 
-def silhouette_agglo_nclusters(linkage_arg):
+def silhouette_agglo_nclusters(linkage_arg, show_data):
     silhouettes = []
     #The range start at 2 because the number of clusters must be at least 2
     for k in range(2,11):
@@ -111,19 +113,25 @@ def silhouette_agglo_nclusters(linkage_arg):
     plt.title("Evolution de la silhouette avec linkage = "+str(linkage_arg))
     #plt.savefig(path_out+"Plot-kmeans-code1-"+str(name)+"-silhouette.jpg",bbox_inches='tight', pad_inches=0.1)
     plt.show()
+    if show_data:
+        max_silhouette = np.argmax(silhouettes)+2
+        model = cluster.AgglomerativeClustering(linkage=linkage_arg, n_clusters=max_silhouette)
+        model = model.fit(datanp)
+        labels = model.labels_
+        plt.scatter(f0, f1, c=labels, s=8)
+        plt.title("Clustering agglomératif ("+ str(linkage_arg)+", n_cluster= "+str(max_silhouette)+") "+str(name))
+        plt.show()
 
 
 #APPELS DES FONCTIONS AVEC LES DIFFERENTS LINKAGE
-silhouette_agglo_nclusters('single')
-silhouette_agglo_nclusters('complete')
-silhouette_agglo_nclusters('average')
-silhouette_agglo_nclusters('ward')
+show=True
+silhouette_agglo_nclusters('single',show)
+silhouette_agglo_nclusters('complete',show)
+silhouette_agglo_nclusters('average',show)
+silhouette_agglo_nclusters('ward',show)
 
 
 
-#plt.scatter(f0, f1, c=labels, s=8)
-#plt.title("Clustering agglomératif (average, n_cluster= "+str(k)+") "+str(name))
-#plt.show()
 
 #######################################################################
 

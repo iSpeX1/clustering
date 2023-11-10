@@ -13,7 +13,7 @@ from scipy.cluster.hierarchy import dendrogram
 
 
 path = './artificial/'
-name="xclara.arff"
+name="2sp2glob.arff"
 
 #path_out = './fig/'
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -75,7 +75,7 @@ plt.show()
 
 
 
-
+"""
 
 ### FIXER la distance
 # 
@@ -120,3 +120,4 @@ print("nb clusters =",kres,", nb feuilles = ", leaves, " runtime = ", round((tps
 
 #######################################################################
 
+"""
